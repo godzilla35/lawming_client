@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'constant.dart';
 import 'dashboard.dart';
 import 'content_input_page.dart';
+import 'user_model.dart';
+import 'package:provider/provider.dart';
 
 /// This is the stateful widget that the main application instantiates.
 class HomePage extends StatefulWidget {
@@ -18,7 +20,7 @@ class _HomePageState extends State<HomePage> {
   List<Widget> getContents(BuildContext context) {
     return <Widget>[
       Text(
-        'Index 0: Home',
+        '${Provider.of<UserModel>(context, listen: false).userEmail!}',
         style: kOptionStyle,
       ),
       DashBoard(),
