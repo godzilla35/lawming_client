@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'auth.dart';
+import '../networkHelper.dart';
 
-import 'user.dart';
 
 class UserModel extends ChangeNotifier {
   String? userEmail = 'no-email';
@@ -14,9 +13,9 @@ class UserModel extends ChangeNotifier {
     userEmail = email;
     userPassword = password;
 
-    Auth auth = Auth(ID: userEmail, Password: userPassword);
+    NetworkHelper auth = NetworkHelper();
 
-    bool res = await auth.logIn();
+    bool res = await auth.logIn(userEmail!, userPassword!);
 
     notifyListeners();
 

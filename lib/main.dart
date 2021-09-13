@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'signin.dart';
-import 'auth.dart';
+import 'networkHelper.dart';
 import 'home_page.dart';
 import 'login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'user_model.dart';
+import 'Model/user_model.dart';
 
 void main() async {
   // 1. 인증

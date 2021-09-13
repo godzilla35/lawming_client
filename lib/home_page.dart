@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'constant.dart';
 import 'dashboard.dart';
 import 'content_input_page.dart';
-import 'user_model.dart';
+import 'Model/user_model.dart';
 import 'package:provider/provider.dart';
 
 /// This is the stateful widget that the main application instantiates.

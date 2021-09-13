@@ -14,6 +14,18 @@ class _ContentInputPageState extends State<ContentInputPage> {
   PartyType? _myPartyType = PartyType.plaintiff;
   PartyType? _otherPartyType = PartyType.plaintiff;
 
+  final courtController = TextEditingController();
+  final timeController = TextEditingController();
+  // 진행 설정
+  final caseNumController = TextEditingController();
+  final caseDetailController = TextEditingController();
+  final caseArgumentController = TextEditingController();
+  // 당사자 타입
+  final myNameController = TextEditingController();
+  // 상대방 타입
+  final opponentNameController = TextEditingController();
+  final costController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Form(

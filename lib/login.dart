@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'auth.dart';
-import 'user_model.dart';
+import 'networkHelper.dart';
+import 'Model/user_model.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -60,7 +60,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       print('login button clicked');
                       bool res = await Provider.of<UserModel>(context, listen: false)
                           .login(emailController.text, passwordController.text);
-
                       if(res) {
                         Navigator.pushNamedAndRemoveUntil(context, '/homeScreen', (Route<dynamic> route) => false);
                       } else {

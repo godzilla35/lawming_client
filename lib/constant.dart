@@ -9,3 +9,6 @@ enum ProgressType {continuation, closure, advanceHearing}
 
 // plaintiff : 원고, closure : 종결
 enum PartyType {plaintiff, respondent}
+
+const String loginAPIUrl = 'http://3.15.146.212:8080/auth/login';
+const String bokdaeriPostAPIUrl = 'http://3.15.146.212:8080/v1/bokdaeriPost';
