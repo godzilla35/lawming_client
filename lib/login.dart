@@ -1,64 +1,88 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_login/flutter_login.dart';
 import 'auth.dart';
 import 'user_model.dart';
 import 'package:provider/provider.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   Duration get loginTime => Duration(milliseconds: 2250);
 
-  Future<String> _authUser(LoginData data) async {
-    print('Name: ${data.name}, Password: ${data.password}');
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
 
+class _LoginScreenState extends State<LoginScreen> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
 
-    Auth auth = Auth(ID: data.name, Password: data.password);
-    bool logInRes = await auth.logIn();
-
-    if(logInRes == true) {
-
-    }
-
-
-    return (logInRes == false ? 'login-failed!' : '');
-
-    //return Future.delayed(loginTime).then((_) {
-    //  if (!users.containsKey(data.name)) {
-    //    return 'User not exists';
-    //  }
-    //  if (users[data.name] != data.password) {
-    //    return 'Password does not match';
-    //  }
-    //  return '';
-    //});
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
-
-  Future<String> _recoverPassword(String name) {
-    print('Name: $name');
-    return Future.delayed(loginTime).then((_) {
-      //if (!users.containsKey(name)) {
-      //  return 'User not exists';
-      //}
-      return '';
-    });
-  }
-
-  bool _authMy = false;
 
   @override
   Widget build(BuildContext context) {
+    return Form(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Login'),
+        ),
+        body: Center(
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Text('Email :'),
+                  Expanded(
+                    child: TextField(
+                      controller: emailController,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Text('Password :'),
+                  Expanded(
+                    child: TextField(
+                      controller: passwordController,
+                      obscureText: true,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  TextButton(
+                    onPressed: () async {
+                      print('login button clicked');
+                      bool res = await Provider.of<UserModel>(context, listen: false)
+                          .login(emailController.text, passwordController.text);
 
-    return FlutterLogin(
-      title: 'LAWMING',
-      logo: 'images/test.jpg',
-      onLogin: (LoginData data) async {
-        bool res = await Provider.of<UserModel>(context, listen: false).login(data.name, data.password);
-        return (res ? '' : 'failed');
-      },
-      onSignup: _authUser,
-      onSubmitAnimationCompleted: () {
-        Navigator.pushNamedAndRemoveUntil(context, '/homeScreen', (Route<dynamic> route) => false);
-      },
-      onRecoverPassword: _recoverPassword,
+                      if(res) {
+                        Navigator.pushNamedAndRemoveUntil(context, '/homeScreen', (Route<dynamic> route) => false);
+                      } else {
+                        print('login failed!');
+                      }
+
+                    },
+                    child: Text('login'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      print('sigin button clicked');
+                      Navigator.pushNamed(context, '/signin');
+                    },
+                    child: Text('signin'),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
