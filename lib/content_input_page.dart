@@ -1,4 +1,8 @@
+import 'package:client/Model/bokdaeriPost.dart';
+import 'package:client/Model/user_model.dart';
+import 'package:client/networkHelper.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'constant.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
@@ -10,9 +14,9 @@ class ContentInputPage extends StatefulWidget {
 }
 
 class _ContentInputPageState extends State<ContentInputPage> {
-  ProgressType? _progressType = ProgressType.continuation;
-  PartyType? _myPartyType = PartyType.plaintiff;
-  PartyType? _otherPartyType = PartyType.plaintiff;
+  ProgressType _progressType = ProgressType.continuation;
+  PartyType _myPartyType = PartyType.plaintiff;
+  PartyType _otherPartyType = PartyType.plaintiff;
 
   final courtController = TextEditingController();
   final timeController = TextEditingController();
@@ -39,7 +43,7 @@ class _ContentInputPageState extends State<ContentInputPage> {
                 children: [
                   Text('법원 :'),
                   Expanded(
-                    child: TextField(),
+                    child: TextField(controller: courtController,),
                   ),
                 ],
               ),
@@ -51,7 +55,7 @@ class _ContentInputPageState extends State<ContentInputPage> {
                     children: [
                       Text('시간 :'),
                       Expanded(
-                        child: TextField(),
+                        child: TextField(controller: timeController),
                       ),
                     ],
                   ),
@@ -111,7 +115,7 @@ class _ContentInputPageState extends State<ContentInputPage> {
                       groupValue: _progressType,
                       onChanged: (ProgressType? value) {
                         setState(() {
-                          _progressType = value;
+                          _progressType = value!;
                         });
                       },
                     ),
@@ -129,7 +133,7 @@ class _ContentInputPageState extends State<ContentInputPage> {
                       groupValue: _progressType,
                       onChanged: (ProgressType? value) {
                         setState(() {
-                          _progressType = value;
+                          _progressType = value!;
                         });
                       },
                     ),
@@ -147,7 +151,7 @@ class _ContentInputPageState extends State<ContentInputPage> {
                       groupValue: _progressType,
                       onChanged: (ProgressType? value) {
                         setState(() {
-                          _progressType = value;
+                          _progressType = value!;
                         });
                       },
                     ),
@@ -159,7 +163,7 @@ class _ContentInputPageState extends State<ContentInputPage> {
                 children: [
                   Text('사건번호 :'),
                   Expanded(
-                    child: TextField(),
+                    child: TextField(controller: caseNumController),
                   ),
                 ],
               ),
@@ -168,6 +172,7 @@ class _ContentInputPageState extends State<ContentInputPage> {
                 maxLength: 128,
                 maxLines: 5,
                 keyboardType: TextInputType.multiline,
+                controller: caseDetailController,
                 decoration: InputDecoration(
                   labelText: '사건 내용',
                   counterText: '',
@@ -180,6 +185,7 @@ class _ContentInputPageState extends State<ContentInputPage> {
                 maxLength: 128,
                 maxLines: 5,
                 keyboardType: TextInputType.multiline,
+                controller: caseArgumentController,
                 decoration: InputDecoration(
                   labelText: '변론 사항',
                   counterText: '',
@@ -203,7 +209,7 @@ class _ContentInputPageState extends State<ContentInputPage> {
                       groupValue: _myPartyType,
                       onChanged: (PartyType? value) {
                         setState(() {
-                          _myPartyType = value;
+                          _myPartyType = value!;
                         });
                       },
                     ),
@@ -221,7 +227,7 @@ class _ContentInputPageState extends State<ContentInputPage> {
                       groupValue: _myPartyType,
                       onChanged: (PartyType? value) {
                         setState(() {
-                          _myPartyType = value;
+                          _myPartyType = value!;
                         });
                       },
                     ),
@@ -232,6 +238,7 @@ class _ContentInputPageState extends State<ContentInputPage> {
                 maxLength: 128,
                 maxLines: null,
                 keyboardType: TextInputType.multiline,
+                controller: myNameController,
                 decoration: InputDecoration(
                   labelText: '명칭 (당사자)',
                   border: OutlineInputBorder(),
@@ -254,7 +261,7 @@ class _ContentInputPageState extends State<ContentInputPage> {
                       groupValue: _otherPartyType,
                       onChanged: (PartyType? value) {
                         setState(() {
-                          _otherPartyType = value;
+                          _otherPartyType = value!;
                         });
                       },
                     ),
@@ -272,7 +279,7 @@ class _ContentInputPageState extends State<ContentInputPage> {
                       groupValue: _otherPartyType,
                       onChanged: (PartyType? value) {
                         setState(() {
-                          _otherPartyType = value;
+                          _otherPartyType = value!;
                         });
                       },
                     ),
@@ -283,6 +290,7 @@ class _ContentInputPageState extends State<ContentInputPage> {
                 maxLength: 128,
                 maxLines: null,
                 keyboardType: TextInputType.multiline,
+                controller: opponentNameController,
                 decoration: InputDecoration(
                   labelText: '명칭 (상대방)',
                   border: OutlineInputBorder(),
@@ -293,6 +301,7 @@ class _ContentInputPageState extends State<ContentInputPage> {
                 maxLength: 128,
                 maxLines: null,
                 keyboardType: TextInputType.multiline,
+                controller: costController,
                 decoration: InputDecoration(
                   labelText: '희망 비용',
                   border: OutlineInputBorder(),
@@ -303,8 +312,52 @@ class _ContentInputPageState extends State<ContentInputPage> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      BokdaeriPost bok = BokdaeriPost();
                       print('복대리 등록 버튼 클릭');
+                      print(courtController.text);
+                      bok.court = courtController.text;
+
+                      print(timeController.text);
+                      DateTime dt = DateTime.parse(timeController.text);
+                      bok.time = dt;
+
+                      print(_progressType);
+                      bok.progressType = _progressType;
+
+                      print(caseNumController.text);
+                      bok.caseNum = caseNumController.text;
+
+                      print(caseDetailController.text);
+                      bok.caseDetail = caseDetailController.text;
+
+                      print(caseArgumentController.text);
+                      bok.caseArgument = caseArgumentController.text;
+
+                      print(_myPartyType);
+                      bok.myPartyType = _myPartyType;
+
+                      print(myNameController.text);
+                      bok.myName = myNameController.text;
+
+                      print(_otherPartyType);
+                      bok.otherPartyType = _otherPartyType;
+
+                      print(opponentNameController.text);
+                      bok.opponentName = opponentNameController.text;
+
+                      print(costController.text);
+                      bok.cost = int.parse(costController.text);
+
+                      NetworkHelper nw = NetworkHelper();
+                      bool res = await nw.bokdaeriPosting(Provider.of<UserModel>(context, listen: false).userEmail!, bok);
+
+                      if (res) {
+                        print('복대리 posting success');
+                      } else {
+                        print('복대리 posting failed');
+                      }
+
                     },
                     child: Text('확인'),
                   ),

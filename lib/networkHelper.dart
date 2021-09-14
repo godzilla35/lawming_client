@@ -50,7 +50,7 @@ class NetworkHelper {
     }
   }
 
-  Future<bool> bokdaeriPosting(User user, BokdaeriPost bok) async {
+  Future<bool> bokdaeriPosting(String userEmail, BokdaeriPost bok) async {
     try {
       final postRes = await http.post(
         Uri.parse(bokdaeriPostAPIUrl),
@@ -58,7 +58,7 @@ class NetworkHelper {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(<String, String>{
-          'email': user.email!,
+          'email': userEmail!,
           'court': bok.court,
           'time': bok.time.toString(),
           'progressType': bok.progressType.toString(),

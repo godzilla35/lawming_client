@@ -7,8 +7,8 @@ TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 // continuation : 속행, closure : 종결, advanceHearing : 사전청취
 enum ProgressType {continuation, closure, advanceHearing}
 
-// plaintiff : 원고, closure : 종결
+// plaintiff : 원고, respondent : 피고
 enum PartyType {plaintiff, respondent}
 
 const String loginAPIUrl = 'http://3.15.146.212:8080/auth/login';
-const String bokdaeriPostAPIUrl = 'http://3.15.146.212:8080/v1/bokdaeriPost';
+const String bokdaeriPostAPIUrl = 'http://3.15.146.212:8080/post';

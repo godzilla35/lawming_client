@@ -5,10 +5,4 @@ class User {
 
   User({this.email, this.nick, this.jwt});
 
-  factory User.fromMap(Map map) {
-    return User(
-      email: map['email'],
-      nick: map['nick'],
-    );
-  }
 }
