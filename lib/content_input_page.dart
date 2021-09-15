@@ -350,7 +350,8 @@ class _ContentInputPageState extends State<ContentInputPage> {
                       bok.cost = int.parse(costController.text);
 
                       NetworkHelper nw = NetworkHelper();
-                      bool res = await nw.bokdaeriPosting(Provider.of<UserModel>(context, listen: false).userEmail!, bok);
+
+                      bool res = await nw.bokdaeriPosting(Provider.of<UserModel>(context, listen: false).userJwt!, bok);
 
                       if (res) {
                         print('복대리 posting success');

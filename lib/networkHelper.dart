@@ -5,12 +5,13 @@ import 'constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'user.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class NetworkHelper {
   NetworkHelper();
 
-  Future<bool> logIn(String ID, String Password) async {
-    if (ID == null || Password == null) return false;
+  Future<User?> logIn(String ID, String Password) async {
+    if (ID == null || Password == null) return null;
 
     try {
       final postRes = await http.post(
@@ -26,39 +27,49 @@ class NetworkHelper {
 
       if (postRes.statusCode != 200) {
         print('login failed ${postRes.body}');
-        return false;
+        return null;
       }
+
+      Map<String, dynamic> postResJson = jsonDecode(postRes.body);
+      Map<String, dynamic> decodedToken =
+          JwtDecoder.decode(postResJson['token']);
+
+      // decodedToken["id"]; decodedToken["email"]; decodedToken["nick"];
+      User loginUser = User(
+          email: decodedToken["email"],
+          nick: decodedToken["nick"],
+          jwt: postResJson['token']);
+
+      print(loginUser);
 
       final prefs = await SharedPreferences.getInstance();
       bool res = await prefs.setString('loggedID', ID);
 
       if (res == false) {
         print('refs.setString ID failed');
-        return false;
       }
 
       res = await prefs.setString('loggedPassword', Password);
       if (res == false) {
         print('refs.setString password failed');
-        return false;
       }
 
-      return (postRes.statusCode == 200);
+      return loginUser;
     } catch (e) {
       print(e);
-      return false;
+      return null;
     }
   }
 
-  Future<bool> bokdaeriPosting(String userEmail, BokdaeriPost bok) async {
+  Future<bool> bokdaeriPosting(String userJWT, BokdaeriPost bok) async {
     try {
       final postRes = await http.post(
         Uri.parse(bokdaeriPostAPIUrl),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer ${userJWT}',
         },
         body: jsonEncode(<String, String>{
-          'email': userEmail!,
           'court': bok.court,
           'time': bok.time.toString(),
           'progressType': bok.progressType.toString(),

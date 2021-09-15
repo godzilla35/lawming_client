@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import '../networkHelper.dart';
+import 'package:client/user.dart';
 
 
 class UserModel extends ChangeNotifier {
@@ -10,15 +11,21 @@ class UserModel extends ChangeNotifier {
   //User _user = User();
 
   Future<bool> login(String email, String password) async {
-    userEmail = email;
-    userPassword = password;
+
 
     NetworkHelper auth = NetworkHelper();
 
-    bool res = await auth.logIn(userEmail!, userPassword!);
+    User? user = await auth.logIn(email, password);
+
+    if(user != null) {
+      userEmail = user.email;
+      userNick = user.nick;
+      userJwt = user.jwt;
+    }
+
 
     notifyListeners();
 
-    return res;
+    return (user != null);
   }
 }

@@ -19,10 +19,20 @@ class _HomePageState extends State<HomePage> {
 
   List<Widget> getContents(BuildContext context) {
     return <Widget>[
-      Text(
-        '${Provider.of<UserModel>(context, listen: false).userEmail!}',
-        style: kOptionStyle,
+      Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            '${Provider.of<UserModel>(context, listen: false).userEmail!}',
+            style: kOptionStyle,
+          ),
+          Text(
+            '${Provider.of<UserModel>(context, listen: false).userNick!}',
+            style: kOptionStyle,
+          ),
+        ],
       ),
+
       DashBoard(),
       Text(
         'Index 2: Settings',
