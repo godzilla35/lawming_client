@@ -1,11 +1,10 @@
+import 'package:client/screens/setting_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'signin.dart';
-import 'networkHelper.dart';
-import 'home_page.dart';
-import 'login.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'Model/user_model.dart';
+import 'screens/signin.dart';
+import 'screens/home_screen.dart';
+import 'screens/login_screen.dart';
+import 'models/user_model.dart';
 
 void main() async {
   // 1. 인증
@@ -47,6 +46,7 @@ class LawmingApp extends StatelessWidget {
         '/signin': (context) => SignInPage(),
         '/homeScreen': (context) => HomePage(),
         '/login': (context) => LoginScreen(),
+        '/settings': (context) => SettingScreen(),
       },
     );
   }

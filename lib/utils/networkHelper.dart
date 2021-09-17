@@ -1,11 +1,11 @@
 import 'dart:convert';
-import 'package:client/Model/bokdaeriPost.dart';
-
-import 'constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
-import 'user.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:http/http.dart' as http;
+import 'package:client/models/bokdaeriPost.dart';
+import 'package:client/constants/constant.dart';
+import 'package:client/models/user.dart';
+
 
 class NetworkHelper {
   NetworkHelper();
@@ -94,5 +94,32 @@ class NetworkHelper {
     }
 
     return true;
+  }
+
+  Future<List<BokdaeriPost>> getBokPosts(String userJWT) async {
+    List<BokdaeriPost> list = List.empty();
+
+    try {
+      final getRes = await http.get(
+        Uri.parse(bokdaeriGetAPIUrl),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer ${userJWT}',
+        },
+      );
+
+      if (getRes.statusCode != 200) {
+        print('getBokPosts failed ${getRes.body}');
+        return List.empty();
+      }
+
+      final parsed = json.decode(getRes.body).cast<Map<String, dynamic>>();
+      return parsed.map<BokdaeriPost>((json) => BokdaeriPost.fromJson(json)).toList();
+
+    } catch (error) {
+      print(error);
+
+      return List.empty();
+    }
   }
 }

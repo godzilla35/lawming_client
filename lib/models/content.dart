@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
+import 'bokdaeriPost.dart';
 
 class Content extends StatelessWidget {
 
-  Content({this.title, this.location, this.date, this.cost});
+  Content({required this.title, required this.bokPost});
 
   final title;
-  final location;
-  final date;
-  final cost;
+  final BokdaeriPost bokPost;
 
   @override
   Widget build(BuildContext context) {
@@ -17,13 +16,13 @@ class Content extends StatelessWidget {
         child: Column(
           children: [
             Text('제목 : $title'),
-            Text('장소 : $location'),
-            Text('날짜 : $date'),
-            Text('희망 비용 : $cost원'),
+            Text('장소 : ${bokPost.court}'),
+            Text('날짜 : ${bokPost.time}'),
+            Text('희망 비용 : ${bokPost.cost}원'),
           ],
         ),
         onPressed: () {
-          print('test1 clicked');
+          print('content $title clicked');
         },
       ),
     );

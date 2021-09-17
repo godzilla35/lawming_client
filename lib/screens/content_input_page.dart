@@ -1,9 +1,9 @@
-import 'package:client/Model/bokdaeriPost.dart';
-import 'package:client/Model/user_model.dart';
-import 'package:client/networkHelper.dart';
+import 'package:client/models/bokdaeriPost.dart';
+import 'package:client/models/user_model.dart';
+import 'package:client/utils/networkHelper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'constant.dart';
+import 'package:client/constants/constant.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 class ContentInputPage extends StatefulWidget {
@@ -313,41 +313,19 @@ class _ContentInputPageState extends State<ContentInputPage> {
                 children: [
                   TextButton(
                     onPressed: () async {
-                      BokdaeriPost bok = BokdaeriPost();
-                      print('복대리 등록 버튼 클릭');
-                      print(courtController.text);
-                      bok.court = courtController.text;
-
-                      print(timeController.text);
-                      DateTime dt = DateTime.parse(timeController.text);
-                      bok.time = dt;
-
-                      print(_progressType);
-                      bok.progressType = _progressType;
-
-                      print(caseNumController.text);
-                      bok.caseNum = caseNumController.text;
-
-                      print(caseDetailController.text);
-                      bok.caseDetail = caseDetailController.text;
-
-                      print(caseArgumentController.text);
-                      bok.caseArgument = caseArgumentController.text;
-
-                      print(_myPartyType);
-                      bok.myPartyType = _myPartyType;
-
-                      print(myNameController.text);
-                      bok.myName = myNameController.text;
-
-                      print(_otherPartyType);
-                      bok.otherPartyType = _otherPartyType;
-
-                      print(opponentNameController.text);
-                      bok.opponentName = opponentNameController.text;
-
-                      print(costController.text);
-                      bok.cost = int.parse(costController.text);
+                      BokdaeriPost bok = BokdaeriPost(
+                        court: courtController.text,
+                        time: DateTime.parse(timeController.text),
+                          progressType: _progressType,
+                          caseNum: caseNumController.text,
+                          caseDetail: caseDetailController.text,
+                          caseArgument: caseArgumentController.text,
+                          myPartyType: _myPartyType,
+                          myName: myNameController.text,
+                          otherPartyType: _otherPartyType,
+                          opponentName: opponentNameController.text,
+                          cost : int.parse(costController.text),
+                      );
 
                       NetworkHelper nw = NetworkHelper();
 
@@ -355,10 +333,10 @@ class _ContentInputPageState extends State<ContentInputPage> {
 
                       if (res) {
                         print('복대리 posting success');
+                        Navigator.pop(context);
                       } else {
                         print('복대리 posting failed');
                       }
-
                     },
                     child: Text('확인'),
                   ),

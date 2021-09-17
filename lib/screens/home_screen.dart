@@ -1,9 +1,12 @@
+import 'package:client/screens/setting_screen.dart';
 import 'package:flutter/material.dart';
-import 'constant.dart';
+import 'package:provider/provider.dart';
+import 'package:client/constants/constant.dart';
+import 'package:client/models/user_model.dart';
 import 'dashboard.dart';
 import 'content_input_page.dart';
-import 'Model/user_model.dart';
-import 'package:provider/provider.dart';
+
+
 
 /// This is the stateful widget that the main application instantiates.
 class HomePage extends StatefulWidget {
@@ -19,25 +22,12 @@ class _HomePageState extends State<HomePage> {
 
   List<Widget> getContents(BuildContext context) {
     return <Widget>[
-      Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            '${Provider.of<UserModel>(context, listen: false).userEmail!}',
-            style: kOptionStyle,
-          ),
-          Text(
-            '${Provider.of<UserModel>(context, listen: false).userNick!}',
-            style: kOptionStyle,
-          ),
-        ],
-      ),
-
-      DashBoard(),
       Text(
-        'Index 2: Settings',
+        'HOME',
         style: kOptionStyle,
       ),
+      DashBoard(),
+      SettingScreen(),
     ];
   }
 
@@ -54,14 +44,16 @@ class _HomePageState extends State<HomePage> {
         title: const Text('Lawming'),
       ),
       body: Center(
-        child: getContents(context).elementAt(_selectedIndex),
+        child: SingleChildScrollView(
+            child: getContents(context).elementAt(_selectedIndex)),
       ),
       floatingActionButton: Visibility(
         visible: _selectedIndex == 1 ? true : false,
         child: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => ContentInputPage()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => ContentInputPage()));
           },
         ),
       ),
