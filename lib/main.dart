@@ -1,7 +1,7 @@
 import 'package:client/screens/setting_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'screens/signin.dart';
+import 'screens/signin_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/login_screen.dart';
 import 'models/user_model.dart';
@@ -43,7 +43,7 @@ class LawmingApp extends StatelessWidget {
     return MaterialApp(
       initialRoute: initialRoute,
       routes: {
-        '/signin': (context) => SignInPage(),
+        '/signin': (context) => SignInScreen(),
         '/homeScreen': (context) => HomePage(),
         '/login': (context) => LoginScreen(),
         '/settings': (context) => SettingScreen(),

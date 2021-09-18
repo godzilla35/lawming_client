@@ -122,4 +122,32 @@ class NetworkHelper {
       return List.empty();
     }
   }
+
+  Future<bool> joinUser(User user) async {
+
+    try {
+      final postRes = await http.post(
+        Uri.parse(joinAPIUrl),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'email': user.email!,
+          'nick' : user.nick!,
+          'password': user.password!,
+        }),
+      );
+
+      if (postRes.statusCode != 200) {
+        print('join failed ${postRes.body}');
+        return false;
+      }
+
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
 }

@@ -11,6 +11,7 @@ enum ProgressType {none, continuation, closure, advanceHearing}
 enum PartyType {none, plaintiff, respondent}
 
 const String loginAPIUrl = 'http://3.15.146.212:8080/auth/login';
+const String joinAPIUrl = 'http://3.15.146.212:8080/auth/join';
 const String bokdaeriPostAPIUrl = 'http://3.15.146.212:8080/post';
 const String bokdaeriGetAPIUrl = 'http://3.15.146.212:8080/posts';
 
