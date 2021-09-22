@@ -11,13 +11,11 @@ class DashBoard extends StatefulWidget {
 }
 
 class _DashBoardState extends State<DashBoard> {
-
   List<Content> _contentList = [];
 
   @override
   void initState() {
     super.initState();
-
   }
 
   Future<List<BokdaeriPost>> getBokPosts(String userJWT) async {
@@ -25,23 +23,20 @@ class _DashBoardState extends State<DashBoard> {
     NetworkHelper nw = NetworkHelper();
     print('DashBoard::getBokPosts called!');
 
-
     list = await nw.getBokPosts(userJWT);
 
     return list;
   }
 
   Future<List<Content>> getContents(String userJWT) async {
-
     List<BokdaeriPost> bokList = await getBokPosts(userJWT);
     List<Content> contentList = [];
     for (int i = 0; i < bokList.length; i++) {
-      contentList.add(Content(title: '복대리', bokPost: bokList[i]));
+      contentList.add(Content(title: '복대리', bokPost: bokList[i], onlyViewMode: false));
       print(bokList[i]);
     }
     _contentList = contentList;
     return contentList;
-
   }
 
   @override
@@ -54,10 +49,11 @@ class _DashBoardState extends State<DashBoard> {
       children: [
         FutureBuilder(
           future: getContents(jwt),
-          builder: (BuildContext context, AsyncSnapshot<List<Content>> snapshot) {
+          builder:
+              (BuildContext context, AsyncSnapshot<List<Content>> snapshot) {
             if (snapshot.hasData == false) {
               return CircularProgressIndicator();
-            }else if (snapshot.hasError) {
+            } else if (snapshot.hasError) {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
@@ -65,19 +61,16 @@ class _DashBoardState extends State<DashBoard> {
                   style: TextStyle(fontSize: 15),
                 ),
               );
-            }else {
+            } else {
               return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: _contentList,
-                )
-              );
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: _contentList,
+                  ));
             }
           },
         ),
       ],
     );
   }
-
-
 }

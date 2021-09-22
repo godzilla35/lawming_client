@@ -176,4 +176,36 @@ class NetworkHelper {
     }
   }
 
+  Future<List<BokdaeriPost>> getUploadedBokPosts(String userJWT, int userID) async {
+    List<BokdaeriPost> list = List.empty();
+
+    try {
+
+      String url = '$bokdaeriGetAPIUrl/$userID';
+
+      final getRes = await http.get(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer ${userJWT}',
+        },
+      );
+
+      if (getRes.statusCode != 200) {
+        print('getUploadedBokPosts failed ${getRes.body}');
+        return List.empty();
+      } else {
+        print('getUploadedBokPosts success ${getRes.body}');
+      }
+
+      final parsed = json.decode(getRes.body).cast<Map<String, dynamic>>();
+      return parsed.map<BokdaeriPost>((json) => BokdaeriPost.fromJson(json)).toList();
+
+    } catch (error) {
+      print(error);
+
+      return List.empty();
+    }
+  }
+
 }
