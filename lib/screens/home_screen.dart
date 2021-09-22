@@ -1,4 +1,4 @@
-import 'package:client/screens/setting_screen.dart';
+import 'package:client/screens/user_info_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:client/constants/constant.dart';
@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> {
         style: kOptionStyle,
       ),
       DashBoard(),
-      SettingScreen(),
+      UserInfoScreen(),
     ];
   }
 
@@ -64,12 +64,12 @@ class _HomePageState extends State<HomePage> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.business),
+            icon: Icon(Icons.work_outlined),
             label: 'Lawming',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
+            icon: Icon(Icons.person),
+            label: 'MyInfo',
           ),
         ],
         currentIndex: _selectedIndex,

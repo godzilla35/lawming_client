@@ -1,4 +1,4 @@
-import 'package:client/screens/setting_screen.dart';
+import 'package:client/screens/user_info_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'screens/signin_screen.dart';
@@ -46,7 +46,7 @@ class LawmingApp extends StatelessWidget {
         '/signin': (context) => SignInScreen(),
         '/homeScreen': (context) => HomePage(),
         '/login': (context) => LoginScreen(),
-        '/settings': (context) => SettingScreen(),
+        '/settings': (context) => UserInfoScreen(),
       },
     );
   }

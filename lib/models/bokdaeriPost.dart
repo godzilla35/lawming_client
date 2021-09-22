@@ -1,6 +1,7 @@
 import 'package:client/constants/constant.dart';
 
 class BokdaeriPost {
+  int id = 0;
   String court = 'court'; // 법원
   DateTime time = DateTime.now(); // 시간
   ProgressType progressType = ProgressType.continuation; // 진행 설정
@@ -57,7 +58,7 @@ class BokdaeriPost {
     }
 
 
-    return BokdaeriPost(
+    BokdaeriPost bok = BokdaeriPost(
       court: json['court'],
       time: DateTime.parse(json['time'].toString()),
       progressType: getProgressType,
@@ -70,5 +71,9 @@ class BokdaeriPost {
       caseArgument: json['caseArgument'],
       cost: json['cost'],
     );
+
+    bok.id = json['id'];
+
+    return bok;
   }
 }

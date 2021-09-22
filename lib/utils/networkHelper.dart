@@ -39,7 +39,8 @@ class NetworkHelper {
           email: decodedToken["email"],
           nick: decodedToken["nick"],
           jwt: postResJson['token']);
-
+      loginUser.id = decodedToken["id"];
+      print('userId : ${loginUser.id}');
       print(loginUser);
 
       final prefs = await SharedPreferences.getInstance();
@@ -140,6 +141,31 @@ class NetworkHelper {
 
       if (postRes.statusCode != 200) {
         print('join failed ${postRes.body}');
+        return false;
+      }
+
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> applyPost(String userJWT, int postID) async {
+
+    try {
+      String applyPostURL = '$bokdaeriPostAPIUrl/$postID/apply';
+
+      final result = await http.patch(
+        Uri.parse(applyPostURL),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer ${userJWT}',
+        },
+      );
+
+      if (result.statusCode != 200) {
+        print('applyPost failed ${result.body}');
         return false;
       }
 

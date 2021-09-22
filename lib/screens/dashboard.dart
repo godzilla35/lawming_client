@@ -30,11 +30,6 @@ class _DashBoardState extends State<DashBoard> {
 
     return list;
   }
-  Future<String> _calculation = Future<String>.delayed(
-    Duration(seconds: 2),
-        () => 'Data Loaded',
-  );
-
 
   Future<List<Content>> getContents(String userJWT) async {
 

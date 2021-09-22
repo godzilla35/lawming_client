@@ -1,3 +1,4 @@
+import 'package:client/screens/post_view_screen.dart';
 import 'package:flutter/material.dart';
 import 'bokdaeriPost.dart';
 
@@ -22,7 +23,7 @@ class Content extends StatelessWidget {
           ],
         ),
         onPressed: () {
-          print('content $title clicked');
+          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => PostViewScreen(bokdaeriPost: bokPost)));
         },
       ),
     );
