@@ -28,12 +28,26 @@ class _DashBoardState extends State<DashBoard> {
     return list;
   }
 
-  Future<List<Content>> getContents(String userJWT) async {
+  Future<List<Content>> getContents(String userJWT, int currentUserId) async {
+    print('userid = $currentUserId');
     List<BokdaeriPost> bokList = await getBokPosts(userJWT);
+    print('${bokList.length}');
     List<Content> contentList = [];
+    bool myBokPost = false;
     for (int i = 0; i < bokList.length; i++) {
-      contentList.add(Content(title: '복대리', bokPost: bokList[i], onlyViewMode: false));
-      print(bokList[i]);
+
+      if(bokList[i].UserId == currentUserId){
+        print('bokList[$i].UserId = ${bokList[i].UserId}');
+        myBokPost = true;
+      } else {
+        myBokPost = false;
+      }
+
+      contentList.add(
+          Content(title: '복대리',
+              bokPost: bokList[i],
+              onlyViewMode: myBokPost == true ? true : false));
+
     }
     _contentList = contentList;
     return contentList;
@@ -42,13 +56,14 @@ class _DashBoardState extends State<DashBoard> {
   @override
   Widget build(BuildContext context) {
     String jwt = Provider.of<UserModel>(context, listen: false).userJwt!;
+    int currenUserId = Provider.of<UserModel>(context, listen: false).userID;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         FutureBuilder(
-          future: getContents(jwt),
+          future: getContents(jwt, currenUserId),
           builder:
               (BuildContext context, AsyncSnapshot<List<Content>> snapshot) {
             if (snapshot.hasData == false) {

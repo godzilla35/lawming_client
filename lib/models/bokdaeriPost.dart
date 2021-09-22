@@ -13,6 +13,7 @@ class BokdaeriPost {
   String caseDetail = 'null';
   String caseArgument = 'null';
   int cost = 100000;
+  int UserId = 0;
 
   BokdaeriPost({
     required this.court,
@@ -73,6 +74,7 @@ class BokdaeriPost {
     );
 
     bok.id = json['id'];
+    bok.UserId = json['UserId'];
 
     return bok;
   }
