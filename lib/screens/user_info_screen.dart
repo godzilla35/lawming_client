@@ -1,10 +1,10 @@
-import 'package:client/screens/my_apply_posts_screen.dart';
-import 'package:client/screens/my_uploading_posts_screen.dart';
+import 'package:client/screens/post_screens/my_apply_posts_screen.dart';
+import 'package:client/screens/post_screens/my_uploading_posts_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:client/models/user_model.dart';
 import 'package:client/constants/constant.dart';
-import 'package:client/models/content.dart';
+import 'package:client/widgets/content.dart';
 
 class UserInfoScreen extends StatefulWidget {
   const UserInfoScreen({Key? key}) : super(key: key);

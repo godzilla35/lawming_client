@@ -1,6 +1,6 @@
 import 'package:client/utils/networkHelper.dart';
 import 'package:flutter/material.dart';
-import 'package:client/models/content.dart';
+import 'package:client/widgets/content.dart';
 import 'package:provider/provider.dart';
 import 'package:client/models/user_model.dart';
 import 'package:client/models/bokdaeriPost.dart';

@@ -1,6 +1,6 @@
-import 'package:client/screens/post_view_screen.dart';
+import 'package:client/screens/post_screens/post_view_screen.dart';
 import 'package:flutter/material.dart';
-import 'bokdaeriPost.dart';
+import '../models/bokdaeriPost.dart';
 
 class Content extends StatelessWidget {
 

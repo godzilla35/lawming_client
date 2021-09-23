@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:client/utils/networkHelper.dart';
 import 'package:client/models/bokdaeriPost.dart';
-import 'package:client/models/content.dart';
+import 'package:client/widgets/content.dart';
 import 'package:client/models/user_model.dart';
 
 class DashBoard extends StatefulWidget {
@@ -60,14 +60,14 @@ class _DashBoardState extends State<DashBoard> {
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         FutureBuilder(
           future: getContents(jwt, currenUserId),
           builder:
               (BuildContext context, AsyncSnapshot<List<Content>> snapshot) {
             if (snapshot.hasData == false) {
-              return CircularProgressIndicator();
+              return Container(child: CircularProgressIndicator(), width: 20, height: 20,);
             } else if (snapshot.hasError) {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
