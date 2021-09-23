@@ -37,7 +37,11 @@ class _MyUploadingPostsScreenState extends State<MyUploadingPostsScreen> {
     print('${bokList.length}');
     List<Content> contentList = [];
     for (int i = 0; i < bokList.length; i++) {
-      contentList.add(Content(title: '복대리', bokPost: bokList[i], onlyViewMode: true,));
+      contentList.add(Content(
+        title: '복대리',
+        bokPost: bokList[i],
+        onlyViewMode: true,
+      ));
       print(bokList[i]);
     }
     _contentList = contentList;
@@ -67,29 +71,38 @@ class _MyUploadingPostsScreenState extends State<MyUploadingPostsScreen> {
           ),
           body: TabBarView(
             children: [
-              FutureBuilder(
-                future: getUploadedContents(jwt, userID),
-                builder: (BuildContext context,
-                    AsyncSnapshot<List<Content>> snapshot) {
-                  if (snapshot.hasData == false) {
-                    return CircularProgressIndicator();
-                  } else if (snapshot.hasError) {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'Error: ${snapshot.error}',
-                        style: TextStyle(fontSize: 15),
-                      ),
-                    );
-                  } else {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: _contentList,
-                      ),
-                    );
-                  }
-                },
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  FutureBuilder(
+                    future: getUploadedContents(jwt, userID),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<Content>> snapshot) {
+                      if (snapshot.hasData == false) {
+                        return Container(
+                          child: CircularProgressIndicator(),
+                          width: 20,
+                          height: 20,
+                        );
+                      } else if (snapshot.hasError) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'Error: ${snapshot.error}',
+                            style: TextStyle(fontSize: 15),
+                          ),
+                        );
+                      } else {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: _contentList,
+                          ),
+                        );
+                      }
+                    },
+                  )
+                ],
               ),
               Icon(Icons.directions_bike),
             ],

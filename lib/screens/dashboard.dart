@@ -35,19 +35,17 @@ class _DashBoardState extends State<DashBoard> {
     List<Content> contentList = [];
     bool myBokPost = false;
     for (int i = 0; i < bokList.length; i++) {
-
-      if(bokList[i].UserId == currentUserId){
+      if (bokList[i].UserId == currentUserId) {
         print('bokList[$i].UserId = ${bokList[i].UserId}');
         myBokPost = true;
       } else {
         myBokPost = false;
       }
 
-      contentList.add(
-          Content(title: '복대리',
-              bokPost: bokList[i],
-              onlyViewMode: myBokPost == true ? true : false));
-
+      contentList.add(Content(
+          title: '복대리',
+          bokPost: bokList[i],
+          onlyViewMode: myBokPost == true ? true : false));
     }
     _contentList = contentList;
     return contentList;
@@ -67,7 +65,11 @@ class _DashBoardState extends State<DashBoard> {
           builder:
               (BuildContext context, AsyncSnapshot<List<Content>> snapshot) {
             if (snapshot.hasData == false) {
-              return Container(child: CircularProgressIndicator(), width: 20, height: 20,);
+              return Container(
+                child: CircularProgressIndicator(),
+                width: 20,
+                height: 20,
+              );
             } else if (snapshot.hasError) {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
