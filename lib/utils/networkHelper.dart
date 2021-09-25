@@ -82,6 +82,7 @@ class NetworkHelper {
           'caseDetail': bok.caseDetail,
           'caseArgument': bok.caseArgument,
           'cost': bok.cost.toString(),
+          'state': bok.state.toString(),
         }),
       );
 
@@ -142,6 +143,8 @@ class NetworkHelper {
       if (postRes.statusCode != 200) {
         print('join failed ${postRes.body}');
         return false;
+      } else {
+        print('===### ${postRes.body}');
       }
 
       return true;
@@ -167,6 +170,9 @@ class NetworkHelper {
       if (result.statusCode != 200) {
         print('applyPost failed ${result.body}');
         return false;
+      } else {
+        print('applyPost successs ${result.body}');
+
       }
 
       return true;
@@ -206,6 +212,39 @@ class NetworkHelper {
 
       return List.empty();
     }
+  }
+
+  Future<List<User>> getPostApplyUsers (String userJWT, int postID) async {
+
+    try {
+
+      String url = '$usersAPIUrl/$postID';
+
+      final getRes = await http.get(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer ${userJWT}',
+        },
+      );
+
+      if (getRes.statusCode != 200) {
+        print('getUploadedBokPosts failed ${getRes.body}');
+        return List.empty();
+      } else {
+        print('getUploadedBokPosts success ${getRes.body}');
+      }
+
+      final parsed = json.decode(getRes.body).cast<Map<String, dynamic>>();
+      return parsed.map<BokdaeriPost>((json) => BokdaeriPost.fromJson(json)).toList();
+
+    } catch (error) {
+      print(error);
+
+      return List.empty();
+    }
+
+    return [];
   }
 
 }

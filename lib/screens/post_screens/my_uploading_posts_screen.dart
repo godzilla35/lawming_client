@@ -40,7 +40,7 @@ class _MyUploadingPostsScreenState extends State<MyUploadingPostsScreen> {
       contentList.add(Content(
         title: '복대리',
         bokPost: bokList[i],
-        onlyViewMode: true,
+        myUploadingPost: true,
       ));
       print(bokList[i]);
     }

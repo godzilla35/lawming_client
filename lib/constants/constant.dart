@@ -10,10 +10,25 @@ enum ProgressType {none, continuation, closure, advanceHearing}
 // plaintiff : 원고, respondent : 피고
 enum PartyType {none, plaintiff, respondent}
 
-const String loginAPIUrl = 'http://3.15.146.212:8080/auth/login';
-const String joinAPIUrl = 'http://3.15.146.212:8080/auth/join';
-const String bokdaeriPostAPIUrl = 'http://3.15.146.212:8080/post';
-const String bokdaeriGetAPIUrl = 'http://3.15.146.212:8080/posts';
+/*
+ * todo : 복대리 구하는 중,
+ * check : 복대리 신청자 확인중,
+ * inProgress : 진행중,
+ * resolve : 복대리 완료,
+ * close: 종료
+*/
+enum PostState {todo, check, inProgress, resolve, close}
+
+const String localServerUrl = '192.168.1.18';
+const String serverUrl = '3.15.146.212';
+
+const String currentServerUrl = localServerUrl;
+
+const String loginAPIUrl = 'http://$currentServerUrl:8080/auth/login';
+const String joinAPIUrl = 'http://$currentServerUrl:8080/auth/join';
+const String bokdaeriPostAPIUrl = 'http://$currentServerUrl:8080/post';
+const String bokdaeriGetAPIUrl = 'http://$currentServerUrl:8080/posts';
+const String usersAPIUrl = 'http://$currentServerUrl:8080/users';
 
 
 const String NULL = 'NULL';

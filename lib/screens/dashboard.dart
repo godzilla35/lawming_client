@@ -45,7 +45,7 @@ class _DashBoardState extends State<DashBoard> {
       contentList.add(Content(
           title: '복대리',
           bokPost: bokList[i],
-          onlyViewMode: myBokPost == true ? true : false));
+          myUploadingPost: myBokPost == true ? true : false));
     }
     _contentList = contentList;
     return contentList;

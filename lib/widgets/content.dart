@@ -4,11 +4,11 @@ import '../models/bokdaeriPost.dart';
 
 class Content extends StatelessWidget {
 
-  Content({required this.title, required this.bokPost, required this.onlyViewMode});
+  Content({required this.title, required this.bokPost, required this.myUploadingPost});
 
   final title;
   final BokdaeriPost bokPost;
-  bool onlyViewMode = false;
+  bool myUploadingPost = false;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class Content extends StatelessWidget {
         ),
         onPressed: () {
           Navigator.push(context,
-              MaterialPageRoute(builder: (BuildContext context) => PostViewScreen(bokdaeriPost: bokPost, onlyViewMode: onlyViewMode,)));
+              MaterialPageRoute(builder: (BuildContext context) => PostViewScreen(bokdaeriPost: bokPost, myPost: myUploadingPost,)));
         },
       ),
     );

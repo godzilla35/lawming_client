@@ -43,7 +43,9 @@ class _ContentInputPageState extends State<ContentInputPage> {
                 children: [
                   Text('법원 :'),
                   Expanded(
-                    child: TextField(controller: courtController,),
+                    child: TextField(
+                      controller: courtController,
+                    ),
                   ),
                 ],
               ),
@@ -316,20 +318,23 @@ class _ContentInputPageState extends State<ContentInputPage> {
                       BokdaeriPost bok = BokdaeriPost(
                         court: courtController.text,
                         time: DateTime.parse(timeController.text),
-                          progressType: _progressType,
-                          caseNum: caseNumController.text,
-                          caseDetail: caseDetailController.text,
-                          caseArgument: caseArgumentController.text,
-                          myPartyType: _myPartyType,
-                          myName: myNameController.text,
-                          otherPartyType: _otherPartyType,
-                          opponentName: opponentNameController.text,
-                          cost : int.parse(costController.text),
+                        progressType: _progressType,
+                        caseNum: caseNumController.text,
+                        caseDetail: caseDetailController.text,
+                        caseArgument: caseArgumentController.text,
+                        myPartyType: _myPartyType,
+                        myName: myNameController.text,
+                        otherPartyType: _otherPartyType,
+                        opponentName: opponentNameController.text,
+                        cost: int.parse(costController.text),
                       );
 
                       NetworkHelper nw = NetworkHelper();
 
-                      bool res = await nw.bokdaeriPosting(Provider.of<UserModel>(context, listen: false).userJwt!, bok);
+                      bool res = await nw.bokdaeriPosting(
+                          Provider.of<UserModel>(context, listen: false)
+                              .userJwt!,
+                          bok);
 
                       if (res) {
                         print('복대리 posting success');

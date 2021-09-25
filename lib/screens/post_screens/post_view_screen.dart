@@ -5,11 +5,13 @@ import 'package:client/models/user_model.dart';
 import 'package:client/utils/networkHelper.dart';
 import 'package:client/utils/dialogHelper.dart';
 import 'package:client/utils/stringHelper.dart';
+import 'package:client/models/user.dart';
+import 'package:client/constants/constant.dart';
 
 class PostViewScreen extends StatefulWidget {
-  PostViewScreen({required this.bokdaeriPost, required this.onlyViewMode});
+  PostViewScreen({required this.bokdaeriPost, required this.myPost});
   final BokdaeriPost bokdaeriPost;
-  bool onlyViewMode = false;
+  bool myPost = false;
   @override
   _PostViewScreenState createState() => _PostViewScreenState();
 }
@@ -21,8 +23,8 @@ class _PostViewScreenState extends State<PostViewScreen> {
     // TODO: implement initState
     super.initState();
     bokdaeriPost = widget.bokdaeriPost;
+    print('복대리 id : ${bokdaeriPost!.id}, 복대리상태 : ${bokdaeriPost!.state} ');
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -35,10 +37,47 @@ class _PostViewScreenState extends State<PostViewScreen> {
     );
   }
 
-
   List<Widget> getPostPersistentFooterButtons(BuildContext context) {
-    if (widget.onlyViewMode) {
-      return [];
+    if (widget.myPost) {
+      return [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            TextButton(
+              style: ButtonStyle(),
+                onPressed: () async {
+                  print('신청 버튼 클릭 ${bokdaeriPost!.id}');
+                  NetworkHelper nw = NetworkHelper();
+                  int bokID = bokdaeriPost!.id;
+                  String jwt =
+                  Provider.of<UserModel>(context, listen: false).userJwt!;
+                  List<User> res = await nw.getPostApplyUsers(jwt, bokID);
+                  print(res);
+
+                },
+                child: Text('Check Applier')),
+            TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Cancel')),
+          ],
+        )
+      ];
+    }
+
+    void applyPost() async {
+      print('신청 버튼 클릭 ${bokdaeriPost!.id}');
+      NetworkHelper nw = NetworkHelper();
+      int bokID = bokdaeriPost!.id;
+      String jwt =
+      Provider.of<UserModel>(context, listen: false).userJwt!;
+      bool res = await nw.applyPost(jwt, bokID);
+      if (res == false) {
+        DialogHelper().ShowErrorDialog(context, 'error', '신청 에러!');
+      } else {
+        Navigator.pop(context);
+      }
     }
 
     return [
@@ -46,21 +85,14 @@ class _PostViewScreenState extends State<PostViewScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           TextButton(
-              onPressed: () async {
-                print('신청 버튼 클릭 ${bokdaeriPost!.id}');
-                NetworkHelper nw = NetworkHelper();
-                int bokID = bokdaeriPost!.id;
-                String jwt =
-                    Provider.of<UserModel>(context, listen: false).userJwt!;
-                bool res = await nw.applyPost(jwt, bokID);
-                if (res == false) {
-                  DialogHelper().ShowErrorDialog(context, 'error', '신청 에러!');
-                } else {
-                  Navigator.pop(context);
-                }
+              onPressed: (bokdaeriPost!.state == PostState.todo)  ? applyPost : null,
+              style: ButtonStyle(),
+              child: (bokdaeriPost!.state == PostState.todo)  ? Text('Apply') : Text('진행중')),
+          TextButton(
+              onPressed: () {
+                Navigator.pop(context);
               },
-              child: Text('Apply')),
-          TextButton(onPressed: () {Navigator.pop(context);}, child: Text('Cancel')),
+              child: Text('Cancel')),
         ],
       )
     ];

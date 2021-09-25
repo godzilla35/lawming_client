@@ -14,6 +14,7 @@ class BokdaeriPost {
   String caseArgument = 'null';
   int cost = 100000;
   int UserId = 0;
+  PostState state = PostState.todo;
 
   BokdaeriPost({
     required this.court,
@@ -75,6 +76,21 @@ class BokdaeriPost {
 
     bok.id = json['id'];
     bok.UserId = json['UserId'];
+
+
+    if (json['state'] == 'PostState.todo') {
+      bok.state = PostState.todo;
+    } else if (json['state'] == 'PostState.check') {
+      bok.state = PostState.check;
+    } else if (json['state'] == 'PostState.inProgress') {
+      bok.state = PostState.inProgress;
+    } else if (json['state'] == 'PostState.resolve') {
+      bok.state = PostState.resolve;
+    } else if (json['state'] == 'PostState.close') {
+      bok.state = PostState.close;
+    }
+
+
 
     return bok;
   }
