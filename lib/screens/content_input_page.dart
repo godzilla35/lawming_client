@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:client/constants/constant.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:client/constants/court_info.dart';
 
 class ContentInputPage extends StatefulWidget {
   const ContentInputPage({Key? key}) : super(key: key);
@@ -30,6 +31,8 @@ class _ContentInputPageState extends State<ContentInputPage> {
   final opponentNameController = TextEditingController();
   final costController = TextEditingController();
 
+  String dropdownValue = CourtInfo().getLocationList()[0];
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -38,6 +41,38 @@ class _ContentInputPageState extends State<ContentInputPage> {
         body: SingleChildScrollView(
           child: Column(
             children: [
+              Row(
+                children: [
+                  Text('지역 :'),
+                  DropdownButton<String>(
+
+                    value: dropdownValue,
+                    icon: const Icon(Icons.keyboard_arrow_down),
+                    iconSize: 16,
+                    elevation: 16,
+                    style: const TextStyle(color: Colors.deepPurple),
+                    underline: Container(
+                      height: 1,
+                      color: Colors.deepPurpleAccent,
+                    ),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        print('===### newValue! = $newValue');
+                        dropdownValue = newValue!;
+                        print('===### dropdownmenu! = $dropdownValue');
+                      });
+                    },
+                    items: CourtInfo()
+                        .getLocationList()
+                        .map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ),
               // 법원
               Row(
                 children: [
@@ -45,6 +80,7 @@ class _ContentInputPageState extends State<ContentInputPage> {
                   Expanded(
                     child: TextField(
                       controller: courtController,
+                      enabled: false,
                     ),
                   ),
                 ],
