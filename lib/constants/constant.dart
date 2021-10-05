@@ -19,7 +19,7 @@ enum PartyType {none, plaintiff, respondent}
 */
 enum PostState {todo, check, inProgress, resolve, close}
 
-const String localServerUrl = '192.168.1.18';
+const String localServerUrl = '192.168.35.41';
 const String serverUrl = '3.15.146.212';
 
 const String currentServerUrl = localServerUrl;

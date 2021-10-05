@@ -214,7 +214,7 @@ class NetworkHelper {
     }
   }
 
-  Future<List<User>> getPostApplyUsers (String userJWT, int postID) async {
+  Future<User?> getPostApplyUsers (String userJWT, int postID) async {
 
     try {
 
@@ -230,21 +230,21 @@ class NetworkHelper {
 
       if (getRes.statusCode != 200) {
         print('getUploadedBokPosts failed ${getRes.body}');
-        return List.empty();
+        return null;
       } else {
-        print('getUploadedBokPosts success ${getRes.body}');
+        //print('getUploadedBokPosts success ${getRes.body}');
       }
+      var parsedJson = json.decode(getRes.body);
 
-      final parsed = json.decode(getRes.body).cast<Map<String, dynamic>>();
-      return parsed.map<BokdaeriPost>((json) => BokdaeriPost.fromJson(json)).toList();
+      User user = User(email: parsedJson['email'], jwt: 'null', nick: parsedJson['nick']);
+      user.id = parsedJson['id'];
+      return user;
 
     } catch (error) {
       print(error);
 
-      return List.empty();
+      return null;
     }
-
-    return [];
   }
 
 }

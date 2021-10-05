@@ -44,16 +44,44 @@ class _PostViewScreenState extends State<PostViewScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             TextButton(
-              style: ButtonStyle(),
+                style: ButtonStyle(),
                 onPressed: () async {
-                  print('신청 버튼 클릭 ${bokdaeriPost!.id}');
                   NetworkHelper nw = NetworkHelper();
                   int bokID = bokdaeriPost!.id;
                   String jwt =
-                  Provider.of<UserModel>(context, listen: false).userJwt!;
-                  List<User> res = await nw.getPostApplyUsers(jwt, bokID);
-                  print(res);
+                      Provider.of<UserModel>(context, listen: false).userJwt!;
+                  User? res = await nw.getPostApplyUsers(jwt, bokID);
+                  print('===### ${res!.id} ${res!.email} ${res!.nick}');
 
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('${res!.nick} (${res!.email})'),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                TextButton(
+                                    onPressed: () {
+                                      print('accept btn clicked!');
+
+                                    },
+                                    child: Text('accept')),
+                                TextButton(
+                                    onPressed: () {
+                                      print('decline btn clicked!');
+                                    },
+                                    child: Text('decline')),
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
                 },
                 child: Text('Check Applier')),
             TextButton(
@@ -70,8 +98,7 @@ class _PostViewScreenState extends State<PostViewScreen> {
       print('신청 버튼 클릭 ${bokdaeriPost!.id}');
       NetworkHelper nw = NetworkHelper();
       int bokID = bokdaeriPost!.id;
-      String jwt =
-      Provider.of<UserModel>(context, listen: false).userJwt!;
+      String jwt = Provider.of<UserModel>(context, listen: false).userJwt!;
       bool res = await nw.applyPost(jwt, bokID);
       if (res == false) {
         DialogHelper().ShowErrorDialog(context, 'error', '신청 에러!');
@@ -85,9 +112,12 @@ class _PostViewScreenState extends State<PostViewScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           TextButton(
-              onPressed: (bokdaeriPost!.state == PostState.todo)  ? applyPost : null,
+              onPressed:
+                  (bokdaeriPost!.state == PostState.todo) ? applyPost : null,
               style: ButtonStyle(),
-              child: (bokdaeriPost!.state == PostState.todo)  ? Text('Apply') : Text('진행중')),
+              child: (bokdaeriPost!.state == PostState.todo)
+                  ? Text('Apply')
+                  : Text('진행중')),
           TextButton(
               onPressed: () {
                 Navigator.pop(context);
