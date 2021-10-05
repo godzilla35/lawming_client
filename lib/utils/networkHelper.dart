@@ -247,4 +247,37 @@ class NetworkHelper {
     }
   }
 
+  Future<bool> setPostState (String userJWT, int postId, PostState postState) async {
+
+    try {
+
+      String url = '$bokdaeriPostStateAPIUrl/$postId/${postState.toString()}';
+      print('setPostState $url');
+      final res = await http.patch(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer ${userJWT}',
+        },
+      );
+
+      if (res.statusCode != 200) {
+        print('getUploadedBokPosts failed ${res.body}');
+        return false;
+      } else {
+        //print('getUploadedBokPosts success ${getRes.body}');
+      }
+      var parsedJson = json.decode(res.body);
+      print('===### postId : ${parsedJson['PostId']} state : ${parsedJson['state']}');
+
+    } catch (error) {
+      print(error);
+
+      return false;
+    }
+
+    return true;
+
+  }
+
 }

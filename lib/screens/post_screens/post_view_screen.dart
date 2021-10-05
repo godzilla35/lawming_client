@@ -37,6 +37,19 @@ class _PostViewScreenState extends State<PostViewScreen> {
     );
   }
 
+  void applyPost() async {
+    print('신청 버튼 클릭 ${bokdaeriPost!.id}');
+    NetworkHelper nw = NetworkHelper();
+    int bokID = bokdaeriPost!.id;
+    String jwt = Provider.of<UserModel>(context, listen: false).userJwt!;
+    bool res = await nw.applyPost(jwt, bokID);
+    if (res == false) {
+      DialogHelper().ShowErrorDialog(context, 'error', '신청 에러!');
+    } else {
+      Navigator.pop(context);
+    }
+  }
+
   List<Widget> getPostPersistentFooterButtons(BuildContext context) {
     if (widget.myPost) {
       return [
@@ -51,7 +64,15 @@ class _PostViewScreenState extends State<PostViewScreen> {
                   String jwt =
                       Provider.of<UserModel>(context, listen: false).userJwt!;
                   User? res = await nw.getPostApplyUsers(jwt, bokID);
-                  print('===### ${res!.id} ${res!.email} ${res!.nick}');
+                  print('===### res = ${res}');
+
+                  if (res == null) {
+                    DialogHelper()
+                        .ShowErrorDialog(context, 'error', 'no apply user!');
+                    return;
+                  }
+
+                  print('===### ${res.id} ${res.email} ${res.nick}');
 
                   showModalBottomSheet(
                     context: context,
@@ -60,19 +81,33 @@ class _PostViewScreenState extends State<PostViewScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('${res!.nick} (${res!.email})'),
+                            Text('${res.nick} (${res.email})'),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 TextButton(
-                                    onPressed: () {
-                                      print('accept btn clicked!');
-
+                                    onPressed: () async {
+                                      NetworkHelper nw = NetworkHelper();
+                                      int bokID = bokdaeriPost!.id;
+                                      String jwt = Provider.of<UserModel>(
+                                              context,
+                                              listen: false)
+                                          .userJwt!;
+                                      bool res = await nw.setPostState(
+                                          jwt, bokID, PostState.inProgress);
+                                      print('===### res = $res');
                                     },
                                     child: Text('accept')),
                                 TextButton(
-                                    onPressed: () {
-                                      print('decline btn clicked!');
+                                    onPressed: () async {
+                                      NetworkHelper nw = NetworkHelper();
+                                      int bokID = bokdaeriPost!.id;
+                                      String jwt = Provider.of<UserModel>(
+                                              context,
+                                              listen: false)
+                                          .userJwt!;
+                                      bool res = await nw.setPostState(
+                                          jwt, bokID, PostState.todo);
                                     },
                                     child: Text('decline')),
                               ],
@@ -92,19 +127,6 @@ class _PostViewScreenState extends State<PostViewScreen> {
           ],
         )
       ];
-    }
-
-    void applyPost() async {
-      print('신청 버튼 클릭 ${bokdaeriPost!.id}');
-      NetworkHelper nw = NetworkHelper();
-      int bokID = bokdaeriPost!.id;
-      String jwt = Provider.of<UserModel>(context, listen: false).userJwt!;
-      bool res = await nw.applyPost(jwt, bokID);
-      if (res == false) {
-        DialogHelper().ShowErrorDialog(context, 'error', '신청 에러!');
-      } else {
-        Navigator.pop(context);
-      }
     }
 
     return [
@@ -246,6 +268,22 @@ class _PostViewScreenState extends State<PostViewScreen> {
               padding: const EdgeInsets.all(8.0),
               child: Container(
                 child: Text(bokdaeriPost.cost.toString()),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                child: Text('진행 상태'),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                child: Text(bokdaeriPost.state.toString()),
               ),
             ),
           ],
