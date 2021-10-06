@@ -137,6 +137,10 @@ class NetworkHelper {
           'email': user.email!,
           'nick' : user.nick!,
           'password': user.password!,
+          'name': user.name!,
+          'phoneNum': user.phoneNum!,
+          'officeName': user.officeName!,
+          'officeNum': user.officeNum!,
         }),
       );
 

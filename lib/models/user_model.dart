@@ -22,7 +22,7 @@ class UserModel extends ChangeNotifier {
       userEmail = user.email;
       userNick = user.nick;
       userJwt = user.jwt;
-      userID = user.id;
+      userID = user.id!;
     }
 
 
