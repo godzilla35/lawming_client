@@ -37,6 +37,7 @@ class CourtInfo {
     '제주도': ['제주지방법원'],
   };
   List<String> getCourtListByLocation(String location) {
+    print('===### location = $location');
     return _courtInfo[location]!;
   }
 

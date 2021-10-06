@@ -19,7 +19,6 @@ class _ContentInputPageState extends State<ContentInputPage> {
   PartyType _myPartyType = PartyType.plaintiff;
   PartyType _otherPartyType = PartyType.plaintiff;
 
-  final courtController = TextEditingController();
   final timeController = TextEditingController();
   // 진행 설정
   final caseNumController = TextEditingController();
@@ -31,7 +30,8 @@ class _ContentInputPageState extends State<ContentInputPage> {
   final opponentNameController = TextEditingController();
   final costController = TextEditingController();
 
-  String dropdownValue = CourtInfo().getLocationList()[0];
+  String locationDropdownValue = '서울';
+  String courtDropdownValue = '대법원';
 
   @override
   Widget build(BuildContext context) {
@@ -45,8 +45,7 @@ class _ContentInputPageState extends State<ContentInputPage> {
                 children: [
                   Text('지역 :'),
                   DropdownButton<String>(
-
-                    value: dropdownValue,
+                    value: locationDropdownValue,
                     icon: const Icon(Icons.keyboard_arrow_down),
                     iconSize: 16,
                     elevation: 16,
@@ -57,9 +56,9 @@ class _ContentInputPageState extends State<ContentInputPage> {
                     ),
                     onChanged: (String? newValue) {
                       setState(() {
-                        print('===### newValue! = $newValue');
-                        dropdownValue = newValue!;
-                        print('===### dropdownmenu! = $dropdownValue');
+                        locationDropdownValue = newValue!;
+                        courtDropdownValue = CourtInfo()
+                            .getCourtListByLocation(locationDropdownValue)[0];
                       });
                     },
                     items: CourtInfo()
@@ -77,11 +76,29 @@ class _ContentInputPageState extends State<ContentInputPage> {
               Row(
                 children: [
                   Text('법원 :'),
-                  Expanded(
-                    child: TextField(
-                      controller: courtController,
-                      enabled: false,
+                  DropdownButton<String>(
+                    value: courtDropdownValue,
+                    icon: const Icon(Icons.keyboard_arrow_down),
+                    iconSize: 16,
+                    elevation: 16,
+                    style: const TextStyle(color: Colors.deepPurple),
+                    underline: Container(
+                      height: 1,
+                      color: Colors.deepPurpleAccent,
                     ),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        courtDropdownValue = newValue!;
+                      });
+                    },
+                    items: CourtInfo()
+                        .getCourtListByLocation(locationDropdownValue)
+                        .map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
                   ),
                 ],
               ),
@@ -352,7 +369,7 @@ class _ContentInputPageState extends State<ContentInputPage> {
                   TextButton(
                     onPressed: () async {
                       BokdaeriPost bok = BokdaeriPost(
-                        court: courtController.text,
+                        court: courtDropdownValue,
                         time: DateTime.parse(timeController.text),
                         progressType: _progressType,
                         caseNum: caseNumController.text,
