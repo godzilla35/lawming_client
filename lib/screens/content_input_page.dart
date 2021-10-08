@@ -4,7 +4,6 @@ import 'package:client/utils/networkHelper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:client/constants/constant.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:client/constants/court_info.dart';
 
 class ContentInputPage extends StatefulWidget {
@@ -118,14 +117,8 @@ class _ContentInputPageState extends State<ContentInputPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       TextButton(
-                        onPressed: () async {
-                          DateTime? datetime = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime.parse("2021-01-01"),
-                            lastDate: DateTime.parse("2025-12-31"),
-                          );
-                          print(datetime);
+                        onPressed: ()  {
+
                         },
                         child: Text(
                           'show date picker',
@@ -134,14 +127,7 @@ class _ContentInputPageState extends State<ContentInputPage> {
                       ),
                       TextButton(
                         onPressed: () {
-                          DatePicker.showTimePicker(context,
-                              showTitleActions: true,
-                              showSecondsColumn: false, onChanged: (date) {
-                            print('change $date in time zone ' +
-                                date.timeZoneOffset.inHours.toString());
-                          }, onConfirm: (date) {
-                            print('confirm $date');
-                          }, currentTime: DateTime.now());
+
                         },
                         child: Text(
                           'show time picker',

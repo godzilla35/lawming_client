@@ -56,38 +56,40 @@ class _DashBoardState extends State<DashBoard> {
     String jwt = Provider.of<UserModel>(context, listen: false).userJwt!;
     int currenUserId = Provider.of<UserModel>(context, listen: false).userID;
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        FutureBuilder(
-          future: getContents(jwt, currenUserId),
-          builder:
-              (BuildContext context, AsyncSnapshot<List<Content>> snapshot) {
-            if (snapshot.hasData == false) {
-              return Container(
-                child: CircularProgressIndicator(),
-                width: 20,
-                height: 20,
-              );
-            } else if (snapshot.hasError) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'Error: ${snapshot.error}',
-                  style: TextStyle(fontSize: 15),
-                ),
-              );
-            } else {
-              return Padding(
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          FutureBuilder(
+            future: getContents(jwt, currenUserId),
+            builder:
+                (BuildContext context, AsyncSnapshot<List<Content>> snapshot) {
+              if (snapshot.hasData == false) {
+                return Container(
+                  child: CircularProgressIndicator(),
+                  width: 20,
+                  height: 20,
+                );
+              } else if (snapshot.hasError) {
+                return Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: _contentList,
-                  ));
-            }
-          },
-        ),
-      ],
+                  child: Text(
+                    'Error: ${snapshot.error}',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                );
+              } else {
+                return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: _contentList,
+                    ));
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 }
