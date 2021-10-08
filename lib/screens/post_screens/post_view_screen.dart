@@ -94,8 +94,9 @@ class _PostViewScreenState extends State<PostViewScreen> {
                                               listen: false)
                                           .userJwt!;
                                       bool res = await nw.setPostState(
-                                          jwt, bokID, PostState.inProgress);
+                                          jwt, bokID, PostState.close);
                                       print('===### res = $res');
+                                      Navigator.pop(context);
                                     },
                                     child: Text('accept')),
                                 TextButton(
@@ -108,6 +109,8 @@ class _PostViewScreenState extends State<PostViewScreen> {
                                           .userJwt!;
                                       bool res = await nw.setPostState(
                                           jwt, bokID, PostState.todo);
+                                      res = await nw.rejectApplying(jwt, bokID);
+                                      Navigator.pop(context);
                                     },
                                     child: Text('decline')),
                               ],

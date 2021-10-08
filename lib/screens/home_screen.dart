@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text('Lawming'),
       ),
-      body: Center(
+      body: Container(
         child: SingleChildScrollView(
             child: getContents(context).elementAt(_selectedIndex)),
       ),

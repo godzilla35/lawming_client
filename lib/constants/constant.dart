@@ -32,6 +32,7 @@ const String bokdaeriPostAPIUrl = 'http://$currentServerUrl:$port/post';
 
 // Ex) patch postState/1/check
 const String bokdaeriPostStateAPIUrl = '$bokdaeriPostAPIUrl/state';
+const String bokdaeriPostRejectAPIUrl = '$bokdaeriPostAPIUrl/apply';
 
 const String bokdaeriGetAPIUrl = 'http://$currentServerUrl:$port/posts';
 

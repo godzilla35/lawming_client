@@ -6,7 +6,6 @@ import 'package:client/models/bokdaeriPost.dart';
 import 'package:client/constants/constant.dart';
 import 'package:client/models/user.dart';
 
-
 class NetworkHelper {
   NetworkHelper();
 
@@ -34,14 +33,26 @@ class NetworkHelper {
       Map<String, dynamic> decodedToken =
           JwtDecoder.decode(postResJson['token']);
 
+      print('decodedToken : ${decodedToken}');
       // decodedToken["id"]; decodedToken["email"]; decodedToken["nick"];
       User loginUser = User(
-          email: decodedToken["email"],
-          nick: decodedToken["nick"],
-          jwt: postResJson['token']);
+        email: decodedToken["email"],
+        nick: decodedToken["nick"],
+        jwt: postResJson['token'],
+        name: decodedToken['name'],
+        phoneNum: decodedToken['phoneNum'],
+        officeName: decodedToken['officeName'],
+        officeNum: decodedToken['officeNum'],
+      );
       loginUser.id = decodedToken["id"];
+
       print('userId : ${loginUser.id}');
-      print(loginUser);
+      print('email : ${loginUser.email}');
+      print('name : ${loginUser.name}');
+      print('phoneNum : ${loginUser.phoneNum}');
+      print('officeName : ${loginUser.officeName}');
+      print('officeNum : ${loginUser.officeNum}');
+
 
       final prefs = await SharedPreferences.getInstance();
       bool res = await prefs.setString('loggedID', ID);
@@ -116,8 +127,9 @@ class NetworkHelper {
       }
 
       final parsed = json.decode(getRes.body).cast<Map<String, dynamic>>();
-      return parsed.map<BokdaeriPost>((json) => BokdaeriPost.fromJson(json)).toList();
-
+      return parsed
+          .map<BokdaeriPost>((json) => BokdaeriPost.fromJson(json))
+          .toList();
     } catch (error) {
       print(error);
 
@@ -126,7 +138,6 @@ class NetworkHelper {
   }
 
   Future<bool> joinUser(User user) async {
-
     try {
       final postRes = await http.post(
         Uri.parse(joinAPIUrl),
@@ -135,7 +146,7 @@ class NetworkHelper {
         },
         body: jsonEncode(<String, String>{
           'email': user.email!,
-          'nick' : user.nick!,
+          'nick': user.nick!,
           'password': user.password!,
           'name': user.name!,
           'phoneNum': user.phoneNum!,
@@ -159,7 +170,6 @@ class NetworkHelper {
   }
 
   Future<bool> applyPost(String userJWT, int postID) async {
-
     try {
       String applyPostURL = '$bokdaeriPostAPIUrl/$postID/apply';
 
@@ -176,7 +186,6 @@ class NetworkHelper {
         return false;
       } else {
         print('applyPost successs ${result.body}');
-
       }
 
       return true;
@@ -186,11 +195,11 @@ class NetworkHelper {
     }
   }
 
-  Future<List<BokdaeriPost>> getUploadedBokPosts(String userJWT, int userID) async {
+  Future<List<BokdaeriPost>> getUploadedBokPosts(
+      String userJWT, int userID) async {
     List<BokdaeriPost> list = List.empty();
 
     try {
-
       String url = '$bokdaeriGetAPIUrl/$userID';
 
       final getRes = await http.get(
@@ -209,8 +218,9 @@ class NetworkHelper {
       }
 
       final parsed = json.decode(getRes.body).cast<Map<String, dynamic>>();
-      return parsed.map<BokdaeriPost>((json) => BokdaeriPost.fromJson(json)).toList();
-
+      return parsed
+          .map<BokdaeriPost>((json) => BokdaeriPost.fromJson(json))
+          .toList();
     } catch (error) {
       print(error);
 
@@ -218,10 +228,8 @@ class NetworkHelper {
     }
   }
 
-  Future<User?> getPostApplyUsers (String userJWT, int postID) async {
-
+  Future<User?> getPostApplyUsers(String userJWT, int postID) async {
     try {
-
       String url = '$usersAPIUrl/$postID';
 
       final getRes = await http.get(
@@ -236,14 +244,14 @@ class NetworkHelper {
         print('getUploadedBokPosts failed ${getRes.body}');
         return null;
       } else {
-        //print('getUploadedBokPosts success ${getRes.body}');
+        print('getUploadedBokPosts success ${getRes.statusCode} ${getRes.body}');
       }
       var parsedJson = json.decode(getRes.body);
 
-      User user = User(email: parsedJson['email'], jwt: 'null', nick: parsedJson['nick']);
+      User user = User(
+          email: parsedJson['email'], jwt: 'null', nick: parsedJson['nick']);
       user.id = parsedJson['id'];
       return user;
-
     } catch (error) {
       print(error);
 
@@ -251,10 +259,9 @@ class NetworkHelper {
     }
   }
 
-  Future<bool> setPostState (String userJWT, int postId, PostState postState) async {
-
+  Future<bool> setPostState(
+      String userJWT, int postId, PostState postState) async {
     try {
-
       String url = '$bokdaeriPostStateAPIUrl/$postId/${postState.toString()}';
       print('setPostState $url');
       final res = await http.patch(
@@ -272,8 +279,8 @@ class NetworkHelper {
         //print('getUploadedBokPosts success ${getRes.body}');
       }
       var parsedJson = json.decode(res.body);
-      print('===### postId : ${parsedJson['PostId']} state : ${parsedJson['state']}');
-
+      print(
+          '===### postId : ${parsedJson['PostId']} state : ${parsedJson['state']}');
     } catch (error) {
       print(error);
 
@@ -281,7 +288,35 @@ class NetworkHelper {
     }
 
     return true;
-
   }
 
+  Future<bool> rejectApplying(
+      String userJWT, int postId) async {
+    try {
+      String url = '$bokdaeriPostRejectAPIUrl/$postId';
+      print('setPostState $url');
+      final res = await http.delete(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer ${userJWT}',
+        },
+      );
+
+      if (res.statusCode != 200) {
+        print('getUploadedBokPosts failed ${res.body}');
+        return false;
+      } else {
+        //print('getUploadedBokPosts success ${getRes.body}');
+      }
+      var parsedJson = json.decode(res.body);
+      print('===### postId : $parsedJson');
+    } catch (error) {
+      print(error);
+
+      return false;
+    }
+
+    return true;
+  }
 }

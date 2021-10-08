@@ -10,6 +10,11 @@ class UserModel extends ChangeNotifier {
   String? userNick = NULL;
   String? userJwt = NULL;
   int userID = 0;
+  String? userName = '';
+  String? userPhoneNum = '';
+  String? userOfficeName = '';
+  String? userOfficeNum = '';
+
 
   Future<bool> logIn(String email, String password) async {
 
@@ -23,6 +28,11 @@ class UserModel extends ChangeNotifier {
       userNick = user.nick;
       userJwt = user.jwt;
       userID = user.id!;
+
+      userName = user.name;
+      userPhoneNum = user.phoneNum;
+      userOfficeName = user.officeName;
+      userOfficeNum = user.officeNum;
     }
 
 
