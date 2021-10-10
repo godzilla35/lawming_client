@@ -29,9 +29,7 @@ class _PostViewScreenState extends State<PostViewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('복대리'),
-      ),
+      appBar: AppBar(),
       body: getPostBody(),
       persistentFooterButtons: getPostPersistentFooterButtons(context),
     );
@@ -156,142 +154,50 @@ class _PostViewScreenState extends State<PostViewScreen> {
   Column getPostBody() {
     BokdaeriPost bokdaeriPost = widget.bokdaeriPost;
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Container(
-            child: Text(bokdaeriPost.court),
-          ),
+          child: Text(bokdaeriPost.court, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            child: Text(bokdaeriPost.time.toString()),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            child: Text(
-              StringHelper().getProgressTypeText(bokdaeriPost.progressType),
-            ),
-          ),
-        ),
-        Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                child: Text('사건번호'),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                child: Text(bokdaeriPost.caseNum),
-              ),
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                child: Text('사건 내용'),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                child: Text(bokdaeriPost.caseDetail),
-              ),
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                child: Text('쟁점'),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                child: Text(bokdaeriPost.caseArgument),
-              ),
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                child: Text(
-                    StringHelper().getPartyTypeText(bokdaeriPost.myPartyType)),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                child: Text(bokdaeriPost.myName),
-              ),
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                child: Text(StringHelper()
-                    .getPartyTypeText(bokdaeriPost.otherPartyType)),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                child: Text(bokdaeriPost.opponentName),
-              ),
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                child: Text('희망 가격'),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                child: Text(bokdaeriPost.cost.toString()),
-              ),
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                child: Text('진행 상태'),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                child: Text(bokdaeriPost.state.toString()),
-              ),
-            ),
-          ],
-        ),
+        SizedBox(height: 8,),
+        CustomListItem(category: '일시', data : bokdaeriPost.time.toString()),
+        CustomListItem(category: '사건 유형', data : StringHelper().getProgressTypeText(bokdaeriPost.progressType)),
+        CustomListItem(category: '사건번호', data : bokdaeriPost.caseNum),
+        CustomListItem(category: '사건 내용', data : bokdaeriPost.caseDetail),
+        CustomListItem(category: '쟁점', data : bokdaeriPost.caseArgument),
+        CustomListItem(category: StringHelper().getPartyTypeText(bokdaeriPost.myPartyType),
+            data : bokdaeriPost.myName),
+        CustomListItem(category: StringHelper().getPartyTypeText(bokdaeriPost.otherPartyType),
+            data : bokdaeriPost.opponentName),
+        CustomListItem(category: '희망 가격',
+            data : bokdaeriPost.cost.toString()),
+        CustomListItem(category: '진행 상태',
+            data : bokdaeriPost.state.toString()),
       ],
+    );
+  }
+}
+
+class CustomListItem extends StatelessWidget {
+  const CustomListItem({Key? key,
+  required this.category,
+    required this.data}) : super(key: key);
+
+  final String category;
+  final String data;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Expanded(child: Text(category), flex: 1,),
+          Expanded(child: Text(data), flex: 3,),
+        ],
+      ),
     );
   }
 }

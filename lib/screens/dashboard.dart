@@ -13,6 +13,24 @@ class DashBoard extends StatefulWidget {
 class _DashBoardState extends State<DashBoard> {
   List<Content> _contentList = [];
 
+  ListView getListViewBuilder(int currentUserId) {
+    int listLength = _contentList.length;
+    bool myBokPost = false;
+
+    ListView res = ListView.builder(itemBuilder: (BuildContext context, int index) {
+      if (_contentList[index].bokPost.UserId == currentUserId) {
+        myBokPost = true;
+      } else {
+        myBokPost = false;
+      }
+      return Content(title: '복대리',
+          bokPost: _contentList[index].bokPost,
+          myUploadingPost: myBokPost ? true : false);
+    });
+
+    return res;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -48,13 +66,14 @@ class _DashBoardState extends State<DashBoard> {
           myUploadingPost: myBokPost == true ? true : false));
     }
     _contentList = contentList;
+
     return contentList;
   }
 
   @override
   Widget build(BuildContext context) {
     String jwt = Provider.of<UserModel>(context, listen: false).userJwt!;
-    int currenUserId = Provider.of<UserModel>(context, listen: false).userID;
+    int currentUserId = Provider.of<UserModel>(context, listen: false).userID;
 
     return SingleChildScrollView(
       child: Column(
@@ -62,7 +81,7 @@ class _DashBoardState extends State<DashBoard> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FutureBuilder(
-            future: getContents(jwt, currenUserId),
+            future: getContents(jwt, currentUserId),
             builder:
                 (BuildContext context, AsyncSnapshot<List<Content>> snapshot) {
               if (snapshot.hasData == false) {

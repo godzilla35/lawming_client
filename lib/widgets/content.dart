@@ -14,40 +14,42 @@ class Content extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OutlinedButton(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              '$title',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            ),
-            Text(
-              '장소 : ${bokPost.court}',
-              style: TextStyle(fontSize: 12),
-            ),
-            Text(
-              '날짜 : ${bokPost.time}',
-              style: TextStyle(fontSize: 12),
-            ),
-            Text(
-              '희망 비용 : ${bokPost.cost}원',
-              style: TextStyle(fontSize: 12),
-            ),
-          ],
+    return Container(
+      child: OutlinedButton(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                '$title',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+              Text(
+                '장소 : ${bokPost.court}',
+                style: TextStyle(fontSize: 12),
+              ),
+              Text(
+                '날짜 : ${bokPost.time}',
+                style: TextStyle(fontSize: 12),
+              ),
+              Text(
+                '희망 비용 : ${bokPost.cost}원',
+                style: TextStyle(fontSize: 12),
+              ),
+            ],
+          ),
         ),
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => PostViewScreen(
+                        bokdaeriPost: bokPost,
+                        myPost: myUploadingPost,
+                      )));
+        },
       ),
-      onPressed: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (BuildContext context) => PostViewScreen(
-                      bokdaeriPost: bokPost,
-                      myPost: myUploadingPost,
-                    )));
-      },
     );
   }
 }
