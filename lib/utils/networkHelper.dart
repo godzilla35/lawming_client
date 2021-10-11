@@ -137,6 +137,34 @@ class NetworkHelper {
     }
   }
 
+  Future<BokdaeriPost?> getBokPost(String userJWT, int postId) async {
+
+    String url = '$bokdaeriPostAPIUrl/$postId';
+    try {
+      final getRes = await http.get(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer ${userJWT}',
+        },
+      );
+
+      if (getRes.statusCode != 200) {
+        print('getBokPosts failed ${getRes.body}');
+        return null;
+      }
+      print('===### 1111');
+      var res = BokdaeriPost.fromJson(json.decode(getRes.body)) ;
+      print('===### 2222');
+      print('===### $res');
+      return res;
+    } catch (error) {
+      print(error);
+
+      return null;
+    }
+  }
+
   Future<bool> joinUser(User user) async {
     try {
       final postRes = await http.post(

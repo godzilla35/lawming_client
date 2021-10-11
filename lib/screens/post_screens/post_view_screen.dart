@@ -26,6 +26,18 @@ class _PostViewScreenState extends State<PostViewScreen> {
     print('복대리 id : ${bokdaeriPost!.id}, 복대리상태 : ${bokdaeriPost!.state} ');
   }
 
+  Future<void> refreshPost() async {
+    NetworkHelper nw = NetworkHelper();
+    String jwt = Provider.of<UserModel>(context, listen: false).userJwt!;
+    BokdaeriPost? bp = await nw.getBokPost(jwt, bokdaeriPost!.id);
+    if(bp != null) {
+      print('refreshPost success bp = ${bp.state}');
+      bokdaeriPost = bp;
+    } else {
+      print('refreshPost failed');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,8 +47,10 @@ class _PostViewScreenState extends State<PostViewScreen> {
     );
   }
 
-  void applyPost() async {
+  void applyPost(BuildContext context) async {
     print('신청 버튼 클릭 ${bokdaeriPost!.id}');
+
+
     NetworkHelper nw = NetworkHelper();
     int bokID = bokdaeriPost!.id;
     String jwt = Provider.of<UserModel>(context, listen: false).userJwt!;
@@ -44,7 +58,14 @@ class _PostViewScreenState extends State<PostViewScreen> {
     if (res == false) {
       DialogHelper().ShowErrorDialog(context, 'error', '신청 에러!');
     } else {
-      Navigator.pop(context);
+      print('refresh before --- ${bokdaeriPost!.state}');
+      await refreshPost();
+      print('refresh after --- ${bokdaeriPost!.state}');
+
+      setState(() {
+        print('setState called');
+      });
+      //Navigator.pop(context);
     }
   }
 
@@ -136,7 +157,7 @@ class _PostViewScreenState extends State<PostViewScreen> {
         children: [
           TextButton(
               onPressed:
-                  (bokdaeriPost!.state == PostState.todo) ? applyPost : null,
+                  (bokdaeriPost!.state == PostState.todo) ? () {applyPost(context);} : null,
               style: ButtonStyle(),
               child: (bokdaeriPost!.state == PostState.todo)
                   ? Text('Apply')
@@ -152,28 +173,28 @@ class _PostViewScreenState extends State<PostViewScreen> {
   }
 
   Column getPostBody() {
-    BokdaeriPost bokdaeriPost = widget.bokdaeriPost;
+    //BokdaeriPost bokdaeriPost = bokdaeriPost;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text(bokdaeriPost.court, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
+          child: Text(bokdaeriPost!.court, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
         ),
         SizedBox(height: 8,),
-        CustomListItem(category: '일시', data : bokdaeriPost.time.toString()),
-        CustomListItem(category: '사건 유형', data : StringHelper().getProgressTypeText(bokdaeriPost.progressType)),
-        CustomListItem(category: '사건번호', data : bokdaeriPost.caseNum),
-        CustomListItem(category: '사건 내용', data : bokdaeriPost.caseDetail),
-        CustomListItem(category: '쟁점', data : bokdaeriPost.caseArgument),
-        CustomListItem(category: StringHelper().getPartyTypeText(bokdaeriPost.myPartyType),
-            data : bokdaeriPost.myName),
-        CustomListItem(category: StringHelper().getPartyTypeText(bokdaeriPost.otherPartyType),
-            data : bokdaeriPost.opponentName),
+        CustomListItem(category: '일시', data : bokdaeriPost!.time.toString()),
+        CustomListItem(category: '사건 유형', data : StringHelper().getProgressTypeText(bokdaeriPost!.progressType)),
+        CustomListItem(category: '사건번호', data : bokdaeriPost!.caseNum),
+        CustomListItem(category: '사건 내용', data : bokdaeriPost!.caseDetail),
+        CustomListItem(category: '쟁점', data : bokdaeriPost!.caseArgument),
+        CustomListItem(category: StringHelper().getPartyTypeText(bokdaeriPost!.myPartyType),
+            data : bokdaeriPost!.myName),
+        CustomListItem(category: StringHelper().getPartyTypeText(bokdaeriPost!.otherPartyType),
+            data : bokdaeriPost!.opponentName),
         CustomListItem(category: '희망 가격',
-            data : bokdaeriPost.cost.toString()),
+            data : bokdaeriPost!.cost.toString()),
         CustomListItem(category: '진행 상태',
-            data : bokdaeriPost.state.toString()),
+            data : bokdaeriPost!.state.toString()),
       ],
     );
   }
